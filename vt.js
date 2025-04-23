@@ -32,9 +32,6 @@ async function handleFileScanFromBuffer(buffer, originalname) {
     return res.data;
 }
 
-    return res.data;
-}
-
 async function handleUrlScan(urlToScan) {
     const data = `url=${encodeURIComponent(urlToScan)}`;
     const res = await axios.post('https://www.virustotal.com/api/v3/urls', data, {
