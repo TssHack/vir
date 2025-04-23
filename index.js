@@ -2,7 +2,7 @@ const express = require('express');
 const withAuthor = require('./withAuthor');
 const multer = require('multer');
 const {
-    handleFileScan,
+    handleFileScanFromBuffer,
     handleUrlScan,
     getDomainInfo,
     getIPInfo,
