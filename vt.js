@@ -71,7 +71,7 @@ async function getFileReportByHash(hash) {
 }
 
 module.exports = {
-    handleFileScan,
+    handleFileScanFromBuffer,
     handleUrlScan,
     getDomainInfo,
     getIPInfo,
