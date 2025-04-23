@@ -2,13 +2,12 @@ const express = require('express');
 const withAuthor = require('./withAuthor');
 const multer = require('multer');
 const {
-    handleFileScanFromBuffer,
+    handleFileScanFromBuffer, // این مهمه
     handleUrlScan,
     getDomainInfo,
     getIPInfo,
     getFileReportByHash
 } = require('./vt');
-
 const app = express();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
