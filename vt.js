@@ -1,9 +1,9 @@
 const axios = require('axios');
-const fs = require('fs');
 const FormData = require('form-data');
 require('dotenv').config();
 
-const API_KEYS = process.env.VT_API_KEYS.split(',');
+// خواندن کلیدها از env
+const API_KEYS = process.env.VT_API_KEYS?.split(',') || [];
 let currentIndex = 0;
 
 function getNextKey() {
@@ -18,6 +18,7 @@ function getHeaders() {
     };
 }
 
+// اسکن فایل از طریق بافر (مناسب برای فرم‌دیتای فایل)
 async function handleFileScanFromBuffer(buffer, originalname) {
     const form = new FormData();
     form.append('file', buffer, originalname);
@@ -32,6 +33,7 @@ async function handleFileScanFromBuffer(buffer, originalname) {
     return res.data;
 }
 
+// اسکن URL
 async function handleUrlScan(urlToScan) {
     const data = `url=${encodeURIComponent(urlToScan)}`;
     const res = await axios.post('https://www.virustotal.com/api/v3/urls', data, {
@@ -40,14 +42,17 @@ async function handleUrlScan(urlToScan) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     });
+
     const scanId = res.data.data.id;
 
     const report = await axios.get(`https://www.virustotal.com/api/v3/urls/${scanId}`, {
         headers: getHeaders()
     });
+
     return report.data;
 }
 
+// اطلاعات دامنه
 async function getDomainInfo(domain) {
     const res = await axios.get(`https://www.virustotal.com/api/v3/domains/${domain}`, {
         headers: getHeaders()
@@ -55,6 +60,7 @@ async function getDomainInfo(domain) {
     return res.data;
 }
 
+// اطلاعات IP
 async function getIPInfo(ip) {
     const res = await axios.get(`https://www.virustotal.com/api/v3/ip_addresses/${ip}`, {
         headers: getHeaders()
@@ -62,6 +68,7 @@ async function getIPInfo(ip) {
     return res.data;
 }
 
+// گزارش فایل با هش (SHA256)
 async function getFileReportByHash(hash) {
     const res = await axios.get(`https://www.virustotal.com/api/v3/files/${hash}`, {
         headers: getHeaders()
@@ -69,8 +76,10 @@ async function getFileReportByHash(hash) {
     return res.data;
 }
 
+// خروجی
 module.exports = {
-    handleFileScan,
+    handleFileScan: handleFileScanFromBuffer, // alias
+    handleFileScanFromBuffer,
     handleUrlScan,
     getDomainInfo,
     getIPInfo,
