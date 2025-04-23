@@ -2,7 +2,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 require('dotenv').config();
 
-const API_KEYS = process.env.VT_API_KEYS?.split(',') || [];
+const API_KEYS = process.env.VT_API_KEYS.split(',');
 let currentIndex = 0;
 
 function getNextKey() {
@@ -17,7 +17,7 @@ function getHeaders() {
     };
 }
 
-async function handleFileScan(buffer, originalname) {
+async function handleFileScanFromBuffer(buffer, originalname) {
     const form = new FormData();
     form.append('file', buffer, originalname);
 
@@ -39,13 +39,11 @@ async function handleUrlScan(urlToScan) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     });
-
     const scanId = res.data.data.id;
 
     const report = await axios.get(`https://www.virustotal.com/api/v3/urls/${scanId}`, {
         headers: getHeaders()
     });
-
     return report.data;
 }
 
@@ -71,7 +69,7 @@ async function getFileReportByHash(hash) {
 }
 
 module.exports = {
-    handleFileScanFromBuffer,
+    handleFileScanFromBuffer, // این خط اضافه شده
     handleUrlScan,
     getDomainInfo,
     getIPInfo,
